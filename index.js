@@ -1,25 +1,19 @@
 const express = require('express');
 const cors = require('cors');
-const products = require('./app/products');
-const fileDb = require('./fileDb');
+const db = require('./fileDb');
+const forum = require('./app/forum');
+
+db.init();
 
 const app = express();
-const port = 8000;
-
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 app.use(express.static('public'));
 
-app.use('/products', products);
+const port = 8000;
 
-const run = async () => {
-	await fileDb.init();
+app.use('/forum', forum);
 
-	app.listen(port, () => {
-		console.log(`Server started on ${port} port!`);
-	});
-};
-
-run().catch(e => {
-	console.error(e);
+app.listen(port, () => {
+	console.log(`Server started on ${port} port`);
 });
